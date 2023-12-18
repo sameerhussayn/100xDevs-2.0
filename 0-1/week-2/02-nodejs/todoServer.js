@@ -41,9 +41,102 @@
  */
   const express = require('express');
   const bodyParser = require('body-parser');
-  
+  const fs = require('fs/promises')
   const app = express();
   
   app.use(bodyParser.json());
   
+app.get('/todos', async(req, res)=>{
+  try {
+    let data = await fs.readFile('todos.json')
+    data = JSON.parse(data)
+
+    return res.status(200).send(data)
+  } catch (error) {
+    return res.status(500).json({error})
+  }
+})
+
+app.get('/todos/:id', async(req, res)=>{
+  try {
+    const {id} = req.params;
+    // console.log(id)
+    let data = await fs.readFile('todos.json')
+  data = JSON.parse(data)
+  
+  const todo = data.find(todo => todo.id ==  id)
+  if(!todo) 
+    return res.status(404).send('Not found')
+
+  return res.status(200).json(todo)
+  } catch (error) {
+    return res.status(500).json({error})
+  }
+})
+
+app.post('/todos', async(req,res)=>{
+  try {
+  const todo = req.body;
+   let todos = await fs.readFile('todos.json')
+  todos = JSON.parse(todos)
+  const id = todos.length + 1;
+  // console.log(id)
+
+  todos.push({...todo, id})
+  await fs.writeFile('todos.json', JSON.stringify(todos))
+
+  return res.status(201).json({id})
+  } catch (error) {
+   return res.status(500).json(error)
+  }
+  
+})
+
+app.put('/todos/:id', async(req, res)=>{
+  try {
+    const {id} = req.params;
+  const updatedTodo = req.body;
+
+  let todos = await fs.readFile('todos.json')
+  todos = JSON.parse(todos)
+
+  todos = todos.map(todo => {
+   return todo.id == id ? {...todo, ...updatedTodo} : todo
+  })
+
+  fs.writeFile('todos.json', JSON.stringify(todos))
+
+  return res.status(200).send('Updated')
+  } catch (error) {
+    return res.status(500).json({error})
+  }
+})
+
+
+app.delete('/todos/:id', async(req, res)=>{
+  try {
+    const {id} = req.params;
+
+  let todos = await fs.readFile('todos.json')
+  todos = JSON.parse(todos);
+
+  const todoFound = todos.find(todo => todo.id == id)
+  if(!todoFound)
+    return res.status(400).send('Not Found.')
+
+  todos = todos.filter(todo => todo.id != id)
+
+  await fs.writeFile('todos.json', JSON.stringify(todos))
+
+  return res.status(200).send('deleted')
+  } catch (error) {
+    return res.status(500).json({error})
+  }
+})
+
+app.all('*', (req, res)=>{
+  return res.status(404).send("Route not found")
+})
+
+  // app.listen(3000, console.log('Server started.'))
   module.exports = app;
