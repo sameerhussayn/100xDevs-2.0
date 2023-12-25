@@ -1,0 +1,27 @@
+<html>
+    <body>
+        <h2>Interst Calculator</h2>
+
+        <input type="text" id="amount" placeholder="Amount"><br><br>
+        <input type="text" id="rate" placeholder="Interest Rate"><br><br>
+        <input type="text" id="years" placeholder="No. of years"><br><br>
+        <button onclick="interestCalculator()">Calculate</button>
+        <div id="data"></div>
+        <script>
+           
+            async function interestCalculator(){
+                const amount = document.querySelector('#amount').value;
+                const rate = document.querySelector('#rate').value;
+                const years = document.querySelector('#years').value;
+
+                const res = await fetch(`https://sum-server.100xdevs.com/interest?principal=${amount}&rate=${rate}&time=${years}`)
+                const data = await res.json();
+
+                // document.body.innerHTML += `<p>The total amount: ${data.total}</p><p>The total gains: ${data.interest}</p>`
+                document.querySelector('#data').innerHTML = `<p>The total amount: ${data.total}</p><p>The total gains: ${data.interest}</p>`
+                
+
+            }
+        </script>
+    </body>
+</html>
