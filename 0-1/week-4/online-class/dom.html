@@ -1,0 +1,30 @@
+<html>
+    <body>
+        <h3>Enter values to get sum.</h3>
+        <input oninput="debounce()" type="text"  placeholder="First Number" id="firstNum"><br><br>
+        <input oninput="debounce()" type="text"  placeholder="Second Number" id="secondNum"><br><br>
+        <!-- <button onclick="calSum()">Calculate Sum</button> -->
+        <div id="finalSum">
+        </div>
+        <script>
+            let timeout;
+            function debounce(){
+                clearTimeout(timeout);
+                 timeout = setTimeout(calSum, 500)
+            }
+
+         async   function calSum(){
+                const num1 = document.getElementById('firstNum').value;
+            const num2 = document.getElementById('secondNum').value;
+            const div = document.getElementById('finalSum')
+                // const total = document.createElement()
+            
+
+               const res = await fetch(`https://sum-server.100xdevs.com/sum?a=${num1}&b=${num2||0}`)
+               const total = await res.text();
+               div.innerText = `The sum is ${total}`
+            }
+
+        </script>
+    </body>
+</html>
