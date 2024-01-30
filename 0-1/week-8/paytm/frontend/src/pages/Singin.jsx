@@ -22,15 +22,13 @@ const Singin = () => {
       e.preventDefault();
       try {
         const res = await axios.post('http://localhost:3000/api/v1/user/signin', formData)
-        
-
       if(res.data.success){
         window.localStorage.setItem('token', res.data.token);
         window.localStorage.setItem('name', res.data.name)
         navigate('/dashboard', {state: {userName: res.data.name }})
       }
       } catch (error) {
-        alert(error?.response?.data?.message )
+        alert(error?.response?.data?.message || 'Unexpected error' )
         console.log(error?.response?.data?.message )
       }
     }

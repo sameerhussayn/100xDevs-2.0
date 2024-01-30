@@ -12,7 +12,6 @@ const router = Router();
 // /api/v1/user/signup
 router.post("/signup", async (req, res) => {
   try {
-    console.log(req.body)
     const validate = await signUpValidations.safeParseAsync(req.body);
 
     if (!validate.success) {
@@ -44,6 +43,7 @@ router.post("/signup", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" , error, success: false});
+    console.log(error)
   }
 });
 
@@ -51,12 +51,13 @@ router.post("/signup", async (req, res) => {
 router.post("/signin", async (req, res) => {
   try {
     const userFound = await User.findOne({ userName: req.body.userName });
+    
     if (!userFound) {
       return res.status(411).json({ message: "Unauthorized access" });
     }
 
     if (userFound.password !== req.body.password) {
-      return res.status(411).json({ message: "Unauthorized access" });
+      return res.status(411).json({ message: "Unauthorized access /  Wrong Password" });
     }
 
     const token = jwt.sign(
