@@ -1,6 +1,7 @@
 import express from 'express'
 import mainRouter from './routes/index.js'
 import cors from 'cors'
+import 'dotenv/config.js'
 import './db.js'
 
 const port = process.env.PORT || 3000

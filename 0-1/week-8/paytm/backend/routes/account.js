@@ -10,7 +10,7 @@ router.get("/balance", authMiddleware, async (req, res) => {
   try {
     const {balance} = await Account.findOne({ userId: req.userId });
 
-    return res.json({ balance });
+    return res.json({ balance, success: true });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -61,7 +61,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
 
     await session.commitTransaction();
     res.json({
-      message: "Transfer successful",
+      message: "Transfer successful", success: true
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
