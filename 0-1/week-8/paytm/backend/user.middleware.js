@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken'
-import { JWT_secret } from './config.js'
+import 'dotenv/config'
 
 export function authMiddleware(req, res, next){
     let {authorization} = req.headers
-
 
     if(!authorization || !authorization.startsWith('Bearer ')){
         return res.status(403).json({message: 'Unauthorized acces'})
@@ -11,7 +10,7 @@ export function authMiddleware(req, res, next){
 
     const token = authorization.split(' ')[1]
     try {
-        const decoded = jwt.verify(token, JWT_secret)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
         if(!decoded.userId){
             return res.status(403).json({message: 'Unauthorized acces'})
         }

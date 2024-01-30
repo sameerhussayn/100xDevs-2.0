@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import 'dotenv/config'
 
-mongoose.connect('mongodb+srv://admin:data123@cluster0.d1bj68x.mongodb.net/paytm') 
+mongoose.connect(process.env.DB_URL) 
   .then(() => {
     console.log('Database connected');
   })
@@ -8,7 +9,7 @@ mongoose.connect('mongodb+srv://admin:data123@cluster0.d1bj68x.mongodb.net/paytm
 
 
 const UserSchema = mongoose.Schema({
-    username: {
+    userName: {
         type: String,
         required: true,
         min: 3,

@@ -1,7 +1,7 @@
 import {z} from 'zod'
 
 export const signUpValidations = z.object({
-    username: z.string({
+    userName: z.string({
         required_error: "username is required"
     }).email().max(30),
     firstName: z.string({
