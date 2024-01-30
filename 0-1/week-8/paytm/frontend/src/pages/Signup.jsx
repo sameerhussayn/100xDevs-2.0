@@ -32,9 +32,9 @@ const Signup = () => {
         navigate('/signin')
       }
     } catch (error) {
-      alert(error?.response?.data?.message )
+      alert(error.response.data.message|| 'Unexpected error' )
       console.log(error?.response?.data?.message )
-      
+      console.log(error)
     }
   }
 
